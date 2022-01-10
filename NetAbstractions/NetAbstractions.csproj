@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>ToolBX.$(AssemblyName)</RootNamespace>
+		<PackageId>ToolBX.$(AssemblyName)</PackageId>
+		<Authors>Mathieu Moreault</Authors>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<RepositoryUrl>https://github.com/Moreault/NetAbstractions</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/Moreault/NetAbstractions</PackageProjectUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Description>Abstractions for .NET base types such as File and Directory to provide easier means to mock low-level operations.</Description>
+		<Product>ToolBX.$(AssemblyName)</Product>
+		<PackageIcon>netabstractions.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\netabstractions.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Include="..\README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ToolBX.AutoInject" Version="1.0.0" />
+	</ItemGroup>
+
+</Project>
