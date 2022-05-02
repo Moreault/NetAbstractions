@@ -1,4 +1,5 @@
 ﻿using ToolBX.Mathemancy;
+using ToolBX.NetAbstractions.IO;
 
 namespace ToolBX.NetAbstractions.Diagnostics;
 
@@ -61,7 +62,7 @@ public interface IConsole
         set;
     }
 
-    TextWriter Error { get; }
+    ITextWriter Error { get; set; }
 
     [UnsupportedOSPlatform("android")]
     [UnsupportedOSPlatform("browser")]
@@ -73,7 +74,7 @@ public interface IConsole
     [UnsupportedOSPlatform("browser")]
     [UnsupportedOSPlatform("ios")]
     [UnsupportedOSPlatform("tvos")]
-    TextReader In { get; }
+    ITextReader In { get; set; }
 
     [UnsupportedOSPlatform("android")]
     [UnsupportedOSPlatform("browser")]
@@ -95,7 +96,7 @@ public interface IConsole
     [SupportedOSPlatform("windows")]
     bool IsNumberLockActive { get; }
 
-    TextWriter Out { get; }
+    ITextWriter Out { get; set; }
 
     Encoding OutputEncoding
     {
@@ -312,7 +313,16 @@ public class ConsoleWrapper : IConsole
         set => Console.CursorVisible = value;
     }
 
-    public TextWriter Error => Console.Error;
+    public ITextWriter Error
+    {
+        get => _error.Value;
+        set
+        {
+            Console.SetError(value.Unwrapped);
+            _error = new Lazy<ITextWriter>(() => value);
+        }
+    }
+    private Lazy<ITextWriter> _error = new(() => new TextWriterWrapper(Console.Error));
 
     public ConsoleColor ForegroundColor
     {
@@ -320,8 +330,17 @@ public class ConsoleWrapper : IConsole
         set => Console.ForegroundColor = value;
     }
 
-    public TextReader In => Console.In;
-
+    public ITextReader In
+    {
+        get => _in.Value;
+        set
+        {
+            Console.SetIn(value.Unwrapped);
+            _in = new Lazy<ITextReader>(() => value);
+        }
+    }
+    private Lazy<ITextReader> _in = new(() => new TextReaderWrapper(Console.In));
+    
     public Encoding InputEncoding
     {
         get => Console.InputEncoding;
@@ -334,7 +353,17 @@ public class ConsoleWrapper : IConsole
     public bool IsKeyAvailable => Console.KeyAvailable;
     public Size<int> LargestWindowSize => new(Console.LargestWindowWidth, Console.LargestWindowHeight);
     public bool IsNumberLockActive => Console.NumberLock;
-    public TextWriter Out => Console.Out;
+
+    public ITextWriter Out
+    {
+        get => _out.Value;
+        set
+        {
+            Console.SetOut(value.Unwrapped);
+            _out = new Lazy<ITextWriter>(() => value);
+        }
+    }
+    private Lazy<ITextWriter> _out = new(() => new TextWriterWrapper(Console.Out));
 
     public Encoding OutputEncoding
     {
@@ -422,11 +451,11 @@ public class ConsoleWrapper : IConsole
 
     public void ResetColor() => Console.ResetColor();
 
-    public void SetError(TextWriter newError) => Console.SetError(newError);
+    public void SetError(TextWriter newError) => Error = new TextWriterWrapper(newError);
 
-    public void SetIn(TextReader newIn) => Console.SetIn(newIn);
+    public void SetIn(TextReader newIn) => In = new TextReaderWrapper(newIn);
 
-    public void SetOut(TextWriter newOut) => Console.SetOut(newOut);
+    public void SetOut(TextWriter newOut) => Out = new TextWriterWrapper(newOut);
 
     public void Write(bool value) => Console.Write(value);
 
