@@ -37,8 +37,8 @@ public interface IFile
     void WriteAllText(string path, string contents, Encoding encoding);
     byte[] ReadAllBytes(string path);
     void WriteAllBytes(string path, byte[] bytes);
-    IList<string> ReadAllLines(string path);
-    IList<string> ReadAllLines(string path, Encoding encoding);
+    IReadOnlyList<string> ReadAllLines(string path);
+    IReadOnlyList<string> ReadAllLines(string path, Encoding encoding);
     IEnumerable<string> ReadLines(string path);
     IEnumerable<string> ReadLines(string path, Encoding encoding);
     void WriteAllLines(string path, IList<string> contents);
@@ -127,9 +127,9 @@ public class FileWrapper : IFile
 
     public void WriteAllBytes(string path, byte[] bytes) => File.WriteAllBytes(path, bytes);
 
-    public IList<string> ReadAllLines(string path) => File.ReadAllLines(path);
+    public IReadOnlyList<string> ReadAllLines(string path) => File.ReadAllLines(path);
 
-    public IList<string> ReadAllLines(string path, Encoding encoding) => File.ReadAllLines(path, encoding);
+    public IReadOnlyList<string> ReadAllLines(string path, Encoding encoding) => File.ReadAllLines(path, encoding);
 
     public IEnumerable<string> ReadLines(string path) => File.ReadLines(path);
 

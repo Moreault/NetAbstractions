@@ -4,7 +4,16 @@ public interface IDirectory
 {
     IDirectoryInfo? GetParent(string path);
     IDirectoryInfo CreateDirectory(string path);
-    IDirectoryInfo TryCreateDirectory(string path);
+
+    /// <summary>
+    /// Attempts to create directory at path but does not throw in the event of a failure.
+    /// </summary>
+    TryGetResult<IDirectoryInfo> TryCreateDirectory(string path);
+
+    /// <summary>
+    /// Ensures that path exists and creates it if it doesn't.
+    /// </summary>
+    void EnsureExists(string path);
     bool Exists(string path);
     void SetCreationTime(string path, DateTime creationTime);
     void SetCreationTimeUtc(string path, DateTime creationTimeUtc);
@@ -18,15 +27,15 @@ public interface IDirectory
     void SetLastAccessTimeUtc(string path, DateTime lastAccessTimeUtc);
     DateTime GetLastAccessTime(string path);
     DateTime GetLastAccessTimeUtc(string path);
-    IList<string> GetFiles(string path);
-    IList<string> GetFiles(string path, string searchPattern);
-    IList<string> GetFiles(string path, string searchPattern, SearchOption searchOption);
-    IList<string> GetDirectories(string path);
-    IList<string> GetDirectories(string path, string searchPattern);
-    IList<string> GetDirectories(string path, string searchPattern, SearchOption searchOption);
-    IList<string> GetFileSystemEntries(string path);
-    IList<string> GetFileSystemEntries(string path, string searchPattern);
-    IList<string> GetFileSystemEntries(string path, string searchPattern, SearchOption searchOption);
+    IReadOnlyList<string> GetFiles(string path);
+    IReadOnlyList<string> GetFiles(string path, string searchPattern);
+    IReadOnlyList<string> GetFiles(string path, string searchPattern, SearchOption searchOption);
+    IReadOnlyList<string> GetDirectories(string path);
+    IReadOnlyList<string> GetDirectories(string path, string searchPattern);
+    IReadOnlyList<string> GetDirectories(string path, string searchPattern, SearchOption searchOption);
+    IReadOnlyList<string> GetFileSystemEntries(string path);
+    IReadOnlyList<string> GetFileSystemEntries(string path, string searchPattern);
+    IReadOnlyList<string> GetFileSystemEntries(string path, string searchPattern, SearchOption searchOption);
     IEnumerable<string> EnumerateDirectories(string path);
     IEnumerable<string> EnumerateDirectories(string path, string searchPattern);
     IEnumerable<string> EnumerateDirectories(string path, string searchPattern, SearchOption searchOption);
@@ -42,7 +51,7 @@ public interface IDirectory
     void Move(string sourceDirName, string destDirName);
     void DeleteNonRecursively(string path);
     void DeleteRecursively(string path);
-    IList<string> GetLogicalDrives();
+    IReadOnlyList<string> GetLogicalDrives();
 }
 
 [AutoInject]
@@ -56,7 +65,24 @@ public class DirectoryWrapper : IDirectory
 
     public IDirectoryInfo CreateDirectory(string path) => new DirectoryInfoWrapper(Directory.CreateDirectory(path));
 
-    public IDirectoryInfo TryCreateDirectory(string path) => Exists(path) ? new DirectoryInfoWrapper(new DirectoryInfo(path)) : CreateDirectory(path);
+    public TryGetResult<IDirectoryInfo> TryCreateDirectory(string path)
+    {
+        try
+        {
+            return Exists(path) ? new TryGetResult<IDirectoryInfo>(new DirectoryInfoWrapper(new DirectoryInfo(path))) : new TryGetResult<IDirectoryInfo>(CreateDirectory(path));
+        }
+        catch (Exception)
+        {
+            return TryGetResult<IDirectoryInfo>.Failure;
+        }
+    }
+
+    public void EnsureExists(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path)) throw new ArgumentNullException(nameof(path));
+        if (!Exists(path))
+            CreateDirectory(path);
+    }
 
     public bool Exists(string path) => Directory.Exists(path);
 
@@ -84,23 +110,23 @@ public class DirectoryWrapper : IDirectory
 
     public DateTime GetLastAccessTimeUtc(string path) => Directory.GetLastAccessTimeUtc(path);
 
-    public IList<string> GetFiles(string path) => Directory.GetFiles(path);
+    public IReadOnlyList<string> GetFiles(string path) => Directory.GetFiles(path);
 
-    public IList<string> GetFiles(string path, string searchPattern) => Directory.GetFiles(path, searchPattern);
+    public IReadOnlyList<string> GetFiles(string path, string searchPattern) => Directory.GetFiles(path, searchPattern);
 
-    public IList<string> GetFiles(string path, string searchPattern, SearchOption searchOption) => Directory.GetFiles(path, searchPattern, searchOption);
+    public IReadOnlyList<string> GetFiles(string path, string searchPattern, SearchOption searchOption) => Directory.GetFiles(path, searchPattern, searchOption);
 
-    public IList<string> GetDirectories(string path) => Directory.GetDirectories(path);
+    public IReadOnlyList<string> GetDirectories(string path) => Directory.GetDirectories(path);
 
-    public IList<string> GetDirectories(string path, string searchPattern) => Directory.GetDirectories(path, searchPattern);
+    public IReadOnlyList<string> GetDirectories(string path, string searchPattern) => Directory.GetDirectories(path, searchPattern);
 
-    public IList<string> GetDirectories(string path, string searchPattern, SearchOption searchOption) => Directory.GetDirectories(path, searchPattern, searchOption);
+    public IReadOnlyList<string> GetDirectories(string path, string searchPattern, SearchOption searchOption) => Directory.GetDirectories(path, searchPattern, searchOption);
 
-    public IList<string> GetFileSystemEntries(string path) => Directory.GetFileSystemEntries(path);
+    public IReadOnlyList<string> GetFileSystemEntries(string path) => Directory.GetFileSystemEntries(path);
 
-    public IList<string> GetFileSystemEntries(string path, string searchPattern) => Directory.GetFileSystemEntries(path, searchPattern);
+    public IReadOnlyList<string> GetFileSystemEntries(string path, string searchPattern) => Directory.GetFileSystemEntries(path, searchPattern);
 
-    public IList<string> GetFileSystemEntries(string path, string searchPattern, SearchOption searchOption) => Directory.GetFileSystemEntries(path, searchPattern, searchOption);
+    public IReadOnlyList<string> GetFileSystemEntries(string path, string searchPattern, SearchOption searchOption) => Directory.GetFileSystemEntries(path, searchPattern, searchOption);
 
     public IEnumerable<string> EnumerateDirectories(string path) => Directory.EnumerateDirectories(path);
 
@@ -132,5 +158,7 @@ public class DirectoryWrapper : IDirectory
 
     public void DeleteRecursively(string path) => Directory.Delete(path, true);
 
-    public IList<string> GetLogicalDrives() => Directory.GetLogicalDrives();
+    public IReadOnlyList<string> GetLogicalDrives() => Directory.GetLogicalDrives();
+
+
 }
