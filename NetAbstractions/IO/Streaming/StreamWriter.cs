@@ -25,7 +25,7 @@ public interface IStreamWriter : ITextWriter<StreamWriter>
     Task WriteLineAsync(StringBuilder value, CancellationToken cancellationToken);
 }
 
-public class StreamWriterWrapper : TextWriterWrapper<StreamWriter>, IStreamWriter
+internal class StreamWriterWrapper : TextWriterWrapper<StreamWriter>, IStreamWriter
 {
     public bool AutoFlush
     {

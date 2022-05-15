@@ -31,7 +31,7 @@ public interface IDirectoryInfo : IFileSystemInfo
     void DeleteRecursively();
 }
 
-public class DirectoryInfoWrapper : IDirectoryInfo
+internal class DirectoryInfoWrapper : IDirectoryInfo
 {
     private readonly DirectoryInfo _directory;
 

@@ -65,7 +65,7 @@ public interface IProcess : IComponent, IInstanceWrapper<Process>
     bool Responding { get; }
 }
 
-public class ProcessWrapper : IProcess
+internal class ProcessWrapper : IProcess
 {
     public Process Unwrapped { get; }
 

@@ -24,7 +24,7 @@ public interface IFileInfo : IFileSystemInfo, IInstanceWrapper<FileInfo>
     IFileInfo ReplaceAndIgnoreMetadataErrors(string destinationFileName, string destinationBackupFileName);
 }
 
-public class FileInfoWrapper : IFileInfo
+internal class FileInfoWrapper : IFileInfo
 {
     public FileInfo Unwrapped { get; }
 

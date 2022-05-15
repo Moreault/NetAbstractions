@@ -5,7 +5,7 @@ public interface IDeflateStream : IStream<DeflateStream>
     IStream BaseStream { get; }
 }
 
-public class DeflateStreamWrapper : StreamWrapper<DeflateStream>, IDeflateStream
+internal class DeflateStreamWrapper : StreamWrapper<DeflateStream>, IDeflateStream
 {
     public IStream BaseStream => new StreamWrapper(Unwrapped.BaseStream);
 

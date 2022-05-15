@@ -1,17 +1,16 @@
 ﻿namespace ToolBX.NetAbstractions.IO.Streaming;
 
-//TODO Implement
 public interface IMemoryStream : IStream<MemoryStream>
 {
     byte[] GetBuffer();
     TryGetResult<ArraySegment<byte>> TryGetBuffer();
     int Capacity { get; set; }
-    byte[] ToArray();
     void WriteTo(IStream stream);
     void WriteTo(Stream stream);
+    new byte[] ToArray();
 }
 
-public class MemoryStreamWrapper : StreamWrapper<MemoryStream>, IMemoryStream
+internal class MemoryStreamWrapper : StreamWrapper<MemoryStream>, IMemoryStream
 {
     public int Capacity
     {
@@ -31,7 +30,7 @@ public class MemoryStreamWrapper : StreamWrapper<MemoryStream>, IMemoryStream
         return new TryGetResult<ArraySegment<byte>>(isSuccess, buffer);
     }
 
-    public byte[] ToArray() => Unwrapped.ToArray();
+    public new byte[] ToArray() => Unwrapped.ToArray();
 
     public void WriteTo(IStream stream) => WriteTo(stream.Unwrapped);
 

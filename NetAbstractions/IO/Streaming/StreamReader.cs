@@ -8,7 +8,7 @@ public interface IStreamReader : ITextReader<StreamReader>
     void DiscardBufferedData();
 }
 
-public class StreamReaderWrapper : TextReader<StreamReader>, IStreamReader
+internal class StreamReaderWrapper : TextReader<StreamReader>, IStreamReader
 {
     TextReader IInstanceWrapper<TextReader>.Unwrapped => Unwrapped;
 

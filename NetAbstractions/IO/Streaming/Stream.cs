@@ -35,6 +35,7 @@ public interface IStream : IDisposable, IInstanceWrapper<Stream>, IAsyncDisposab
     void WriteByte(byte value);
     IMemoryStream ToMemoryStream();
     IFileStream ToFileStream(string path);
+    byte[] ToArray();
 }
 
 public interface IStream<out T> : IStream where T : Stream
@@ -42,7 +43,7 @@ public interface IStream<out T> : IStream where T : Stream
     new T Unwrapped { get; }
 }
 
-public class StreamWrapper : IStream
+internal class StreamWrapper : IStream
 {
     public Stream Unwrapped { get; }
 
@@ -178,9 +179,15 @@ public class StreamWrapper : IStream
     public ValueTask DisposeAsync() => Unwrapped.DisposeAsync();
 
     public T GetUnwrapped<T>() where T : Stream => (T)Unwrapped;
+
+    public byte[] ToArray()
+    {
+        using var outstream = ToMemoryStream();
+        return outstream.ToArray();
+    }
 }
 
-public class StreamWrapper<T> : StreamWrapper, IStream<T> where T : Stream
+internal class StreamWrapper<T> : StreamWrapper, IStream<T> where T : Stream
 {
     public new T Unwrapped => GetUnwrapped<T>();
 

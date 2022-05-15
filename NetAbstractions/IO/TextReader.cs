@@ -29,7 +29,7 @@ public interface ITextReader<out T> : ITextReader where T : TextReader
     new T Unwrapped { get; }
 }
 
-public class TextReaderWrapper : ITextReader
+internal class TextReaderWrapper : ITextReader
 {
     public TextReader Unwrapped { get; }
 
@@ -85,7 +85,7 @@ public class TextReaderWrapper : ITextReader
     public T GetUnwrapped<T>() where T : TextReader => (T)Unwrapped;
 }
 
-public class TextReader<T> : TextReaderWrapper, ITextReader<T> where T : TextReader
+internal class TextReader<T> : TextReaderWrapper, ITextReader<T> where T : TextReader
 {
     public new T Unwrapped => GetUnwrapped<T>();
 

@@ -18,7 +18,7 @@ public interface IFileStream : IStream<FileStream>
     void Unlock(long position, long length);
 }
 
-public class FileStreamWrapper : StreamWrapper<FileStream>, IFileStream
+internal class FileStreamWrapper : StreamWrapper<FileStream>, IFileStream
 {
     public bool IsAsync => Unwrapped.IsAsync;
     public string Name => Unwrapped.Name;

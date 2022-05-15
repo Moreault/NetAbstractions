@@ -14,7 +14,7 @@ public interface IZipArchiveEntry : IInstanceWrapper<ZipArchiveEntry>
     IStream Open();
 }
 
-public class ZipArchiveEntryWrapper : IZipArchiveEntry
+internal class ZipArchiveEntryWrapper : IZipArchiveEntry
 {
     public ZipArchiveEntry Unwrapped { get; }
 

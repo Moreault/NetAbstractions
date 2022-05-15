@@ -57,7 +57,7 @@ public interface IZipArchive : IInstanceWrapper<ZipArchive>, IDisposable
     IZipArchiveEntry? GetEntry(string entryName);
 }
 
-public class ZipArchiveWrapper : IZipArchive
+internal class ZipArchiveWrapper : IZipArchive
 {
     public ZipArchive Unwrapped { get; }
     public IReadOnlyCollection<IZipArchiveEntry> Entries => _entries.Value;

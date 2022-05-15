@@ -53,7 +53,7 @@ public interface ITextWriter<out T> : ITextWriter where T : TextWriter
     new T Unwrapped { get; }
 }
 
-public class TextWriterWrapper : ITextWriter
+internal class TextWriterWrapper : ITextWriter
 {
     public TextWriter Unwrapped { get; }
 
@@ -178,7 +178,7 @@ public class TextWriterWrapper : ITextWriter
     public T GetUnwrapped<T>() where T : TextWriter => (T)Unwrapped;
 }
 
-public class TextWriterWrapper<T> : TextWriterWrapper, ITextWriter<T> where T : TextWriter
+internal class TextWriterWrapper<T> : TextWriterWrapper, ITextWriter<T> where T : TextWriter
 {
     public new T Unwrapped => GetUnwrapped<T>();
 
