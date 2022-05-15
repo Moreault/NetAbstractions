@@ -33,6 +33,7 @@ public interface IStream : IDisposable, IInstanceWrapper<Stream>, IAsyncDisposab
     int ReadByte();
     void Write(byte[] buffer, int offset, int count);
     void WriteByte(byte value);
+    IStream Copy();
 }
 
 public interface IStream<out T> : IStream where T : Stream
@@ -133,6 +134,14 @@ public class StreamWrapper : IStream
     public Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken) => Unwrapped.WriteAsync(buffer, offset, count, cancellationToken);
 
     public void WriteByte(byte value) => Unwrapped.WriteByte(value);
+
+    public IStream Copy()
+    {
+        var memoryStream = new MemoryStreamWrapper(new MemoryStream());
+        Seek(0, SeekOrigin.Begin);
+        CopyTo(memoryStream);
+        return memoryStream;
+    }
 
     public bool Equals(StreamWrapper? other)
     {
