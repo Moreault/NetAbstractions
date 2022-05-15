@@ -20,6 +20,15 @@ public interface IStreamFactory
     IMemoryStream MemoryStream(byte[] buffer, int index, int count);
     IMemoryStream MemoryStream(byte[] buffer, int index, int count, bool writable);
     IMemoryStream MemoryStream(byte[] buffer, int index, int count, bool writable, bool publiclyVisible);
+
+    IDeflateStream DeflateStream(Stream stream, CompressionMode mode);
+    IDeflateStream DeflateStream(IStream stream, CompressionMode mode);
+    IDeflateStream DeflateStream(Stream stream, CompressionMode mode, bool leaveOpen);
+    IDeflateStream DeflateStream(IStream stream, CompressionMode mode, bool leaveOpen);
+    IDeflateStream DeflateStream(Stream stream, CompressionLevel compressionLevel);
+    IDeflateStream DeflateStream(IStream stream, CompressionLevel compressionLevel);
+    IDeflateStream DeflateStream(Stream stream, CompressionLevel compressionLevel, bool leaveOpen);
+    IDeflateStream DeflateStream(IStream stream, CompressionLevel compressionLevel, bool leaveOpen);
 }
 
 [AutoInject]
@@ -58,4 +67,20 @@ public class StreamFactory : IStreamFactory
     public IMemoryStream MemoryStream(byte[] buffer, int index, int count, bool writable) => new MemoryStreamWrapper(new MemoryStream(buffer, index, count, writable));
 
     public IMemoryStream MemoryStream(byte[] buffer, int index, int count, bool writable, bool publiclyVisible) => new MemoryStreamWrapper(new MemoryStream(buffer, index, count, writable, publiclyVisible));
+    
+    public IDeflateStream DeflateStream(Stream stream, CompressionMode mode) => new DeflateStreamWrapper(new DeflateStream(stream, mode));
+
+    public IDeflateStream DeflateStream(IStream stream, CompressionMode mode) => new DeflateStreamWrapper(new DeflateStream(stream.Unwrapped, mode));
+
+    public IDeflateStream DeflateStream(Stream stream, CompressionMode mode, bool leaveOpen) => new DeflateStreamWrapper(new DeflateStream(stream, mode, leaveOpen));
+
+    public IDeflateStream DeflateStream(IStream stream, CompressionMode mode, bool leaveOpen) => new DeflateStreamWrapper(new DeflateStream(stream.Unwrapped, mode, leaveOpen));
+
+    public IDeflateStream DeflateStream(Stream stream, CompressionLevel compressionLevel) => new DeflateStreamWrapper(new DeflateStream(stream, compressionLevel));
+
+    public IDeflateStream DeflateStream(IStream stream, CompressionLevel compressionLevel) => new DeflateStreamWrapper(new DeflateStream(stream.Unwrapped, compressionLevel));
+
+    public IDeflateStream DeflateStream(Stream stream, CompressionLevel compressionLevel, bool leaveOpen) => new DeflateStreamWrapper(new DeflateStream(stream, compressionLevel, leaveOpen));
+
+    public IDeflateStream DeflateStream(IStream stream, CompressionLevel compressionLevel, bool leaveOpen) => new DeflateStreamWrapper(new DeflateStream(stream.Unwrapped, compressionLevel, leaveOpen));
 }
