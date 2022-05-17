@@ -12,4 +12,18 @@ internal class DeflateStreamWrapper : StreamWrapper<DeflateStream>, IDeflateStre
     public DeflateStreamWrapper(Stream stream) : base(stream)
     {
     }
+
+    public override IMemoryStream ToMemoryStream()
+    {
+        var memoryStream = new MemoryStreamWrapper(new MemoryStream());
+        CopyTo(memoryStream);
+        return memoryStream;
+    }
+
+    public override IFileStream ToFileStream(string path)
+    {
+        var filestream = new FileStreamWrapper(new FileStream(path, FileMode.Create));
+        CopyTo(filestream);
+        return filestream;
+    }
 }

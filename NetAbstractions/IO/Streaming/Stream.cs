@@ -137,7 +137,7 @@ internal class StreamWrapper : IStream
 
     public void WriteByte(byte value) => Unwrapped.WriteByte(value);
 
-    public IMemoryStream ToMemoryStream()
+    public virtual IMemoryStream ToMemoryStream()
     {
         var memoryStream = new MemoryStreamWrapper(new MemoryStream());
         Seek(0, SeekOrigin.Begin);
@@ -145,12 +145,18 @@ internal class StreamWrapper : IStream
         return memoryStream;
     }
 
-    public IFileStream ToFileStream(string path)
+    public virtual IFileStream ToFileStream(string path)
     {
         var filestream = new FileStreamWrapper(new FileStream(path, FileMode.Create));
         Seek(0, SeekOrigin.Begin);
         CopyTo(filestream);
         return filestream;
+    }
+
+    public virtual byte[] ToArray()
+    {
+        using var outstream = ToMemoryStream();
+        return outstream.ToArray();
     }
 
     public bool Equals(StreamWrapper? other)
@@ -179,12 +185,6 @@ internal class StreamWrapper : IStream
     public ValueTask DisposeAsync() => Unwrapped.DisposeAsync();
 
     public T GetUnwrapped<T>() where T : Stream => (T)Unwrapped;
-
-    public byte[] ToArray()
-    {
-        using var outstream = ToMemoryStream();
-        return outstream.ToArray();
-    }
 }
 
 internal class StreamWrapper<T> : StreamWrapper, IStream<T> where T : Stream

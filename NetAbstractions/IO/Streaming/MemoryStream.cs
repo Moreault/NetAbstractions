@@ -7,7 +7,6 @@ public interface IMemoryStream : IStream<MemoryStream>
     int Capacity { get; set; }
     void WriteTo(IStream stream);
     void WriteTo(Stream stream);
-    new byte[] ToArray();
 }
 
 internal class MemoryStreamWrapper : StreamWrapper<MemoryStream>, IMemoryStream
@@ -30,7 +29,7 @@ internal class MemoryStreamWrapper : StreamWrapper<MemoryStream>, IMemoryStream
         return new TryGetResult<ArraySegment<byte>>(isSuccess, buffer);
     }
 
-    public new byte[] ToArray() => Unwrapped.ToArray();
+    public override byte[] ToArray() => Unwrapped.ToArray();
 
     public void WriteTo(IStream stream) => WriteTo(stream.Unwrapped);
 
