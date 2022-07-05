@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace ToolBX.NetAbstractions.IO;
+﻿namespace ToolBX.NetAbstractions.IO;
 
 public interface IFileInfo : IFileSystemInfo, IInstanceWrapper<FileInfo>
 {
