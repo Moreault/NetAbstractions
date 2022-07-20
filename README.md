@@ -41,3 +41,13 @@ public void ConfigureServices(IServiceCollection services)
 [See AutoInject's repo for more info](https://github.com/Moreault/AutoInject "AutoInject")
 
 You can also add them one by one if that's what you want but that would be weird.
+
+## IInstanceWrapper and the Unwrapped property
+
+This can be a bit confusing at first. Why would you expose an unwrapped property on a wrapped type?
+
+Well because sometimes that's what you need to do if you make your own wrappers or when using 3rd party code.
+
+In short, you should never use the Unwrapped property outside of wrapper code.
+
+This mechanism may be changed in the future but it is so far the least painful way to deal with wrapping issues.

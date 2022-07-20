@@ -2,6 +2,8 @@
 
 public interface IStreamFactory
 {
+    IStream Stream(Stream stream);
+
     IFileStream FileStream(SafeFileHandle handle, FileAccess access);
     IFileStream FileStream(SafeFileHandle handle, FileAccess access, int bufferSize);
     IFileStream FileStream(SafeFileHandle handle, FileAccess access, int bufferSize, bool isAsync);
@@ -34,6 +36,8 @@ public interface IStreamFactory
 [AutoInject]
 public class StreamFactory : IStreamFactory
 {
+    public IStream Stream(Stream stream) => new StreamWrapper(stream);
+
     public IFileStream FileStream(SafeFileHandle handle, FileAccess access) => new FileStreamWrapper(new FileStream(handle, access));
 
     public IFileStream FileStream(SafeFileHandle handle, FileAccess access, int bufferSize) => new FileStreamWrapper(new FileStream(handle, access, bufferSize));
