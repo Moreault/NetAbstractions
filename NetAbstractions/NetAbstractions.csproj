@@ -32,7 +32,7 @@
 	<ItemGroup>
 		<PackageReference Include="ToolBX.AutoInject" Version="1.0.2" />
 		<PackageReference Include="ToolBX.EasyTypeParsing" Version="1.0.0" />
-		<PackageReference Include="ToolBX.Mathemancy" Version="1.0.6" />
+		<PackageReference Include="ToolBX.Mathemancy" Version="1.1.1" />
 	</ItemGroup>
 
 </Project>
