@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<RootNamespace>ToolBX.$(AssemblyName)</RootNamespace>
@@ -12,14 +12,14 @@
 		<PackageProjectUrl>https://github.com/Moreault/NetAbstractions</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Description>Abstractions for ASP .NET Core base types to provide easier means to mock low-level operations.</Description>
-		<Version>1.0.0-beta1</Version>
+		<Version>2.0.0-beta1</Version>
 		<Product>ToolBX.$(AssemblyName)</Product>
 		<PackageIcon>netabstractionsweb.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ToolBX.AutoInject" Version="1.0.2" />
+		<PackageReference Include="ToolBX.AutoInject" Version="2.0.0-beta1" />
 		<PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
 	</ItemGroup>
 

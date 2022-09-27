@@ -16,4 +16,7 @@ global using System.Text;
 global using System.Threading.Tasks;
 global using ToolBX.AutoInject;
 global using ToolBX.EasyTypeParsing;
+global using ToolBX.Mathemancy;
+global using ToolBX.NetAbstractions.IO;
 global using ToolBX.NetAbstractions.IO.Streaming;
+global using ToolBX.OutWarden;

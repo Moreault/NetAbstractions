@@ -1,7 +1,4 @@
-﻿using ToolBX.Mathemancy;
-using ToolBX.NetAbstractions.IO;
-
-namespace ToolBX.NetAbstractions.Diagnostics;
+﻿namespace ToolBX.NetAbstractions.Diagnostics;
 
 public interface IConsole
 {
