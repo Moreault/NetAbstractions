@@ -35,7 +35,7 @@ public class ProcessStarter : IProcessStarter
 
     public IProcess Start(string fileName, string arguments) => new ProcessWrapper(Process.Start(fileName, arguments));
 
-    public IProcess Start(ProcessStartInfo startInfo) => new ProcessWrapper(Process.Start(startInfo));
+    public IProcess Start(ProcessStartInfo startInfo) => new ProcessWrapper(Process.Start(startInfo)!);
 
     public IReadOnlyList<IProcess> GetProcessesByName(string processName, string machineName) => Process.GetProcessesByName(processName, machineName).Select(x => new ProcessWrapper(x) as IProcess).ToList();
 

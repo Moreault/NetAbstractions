@@ -214,7 +214,7 @@ internal class ProcessWrapper : IProcess
 
     public override bool Equals(object? obj) => Unwrapped.Equals(obj);
 
-    protected bool Equals(ProcessWrapper other) => Equals(other as object);
+    protected bool Equals(ProcessWrapper? other) => Equals(other as object);
 
     public override int GetHashCode() => Unwrapped.GetHashCode();
 
