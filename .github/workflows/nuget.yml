@@ -35,3 +35,4 @@ jobs:
     - name: Publish to NuGet.org
       run: | 
         nuget push ${{ env.NuGetDirectory }}/ToolBX.NetAbstractions.*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
+        nuget push ${{ env.NuGetDirectory }}/ToolBX.NetAbstractions.Web.*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
