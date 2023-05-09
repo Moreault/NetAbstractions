@@ -12,7 +12,7 @@
 		<PackageProjectUrl>https://github.com/Moreault/NetAbstractions</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Description>Abstractions for .NET base types such as File and Directory to provide easier means to mock low-level operations.</Description>
-		<Version>2.0.1</Version>
+		<Version>2.0.2-beta1</Version>
 		<Product>ToolBX.$(AssemblyName)</Product>
 		<PackageIcon>netabstractions.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>

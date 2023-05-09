@@ -267,6 +267,7 @@ public interface IConsole
     void WriteLine(ulong value);
 }
 
+#pragma warning disable CA1416
 [AutoInject]
 public class ConsoleWrapper : IConsole
 {
@@ -337,7 +338,7 @@ public class ConsoleWrapper : IConsole
         }
     }
     private Lazy<ITextReader> _in = new(() => new TextReaderWrapper(Console.In));
-    
+
     public Encoding InputEncoding
     {
         get => Console.InputEncoding;
@@ -350,6 +351,7 @@ public class ConsoleWrapper : IConsole
     public bool IsKeyAvailable => Console.KeyAvailable;
     public Size<int> LargestWindowSize => new(Console.LargestWindowWidth, Console.LargestWindowHeight);
     public bool IsNumberLockActive => Console.NumberLock;
+
 
     public ITextWriter Out
     {
@@ -367,6 +369,7 @@ public class ConsoleWrapper : IConsole
         get => Console.OutputEncoding;
         set => Console.OutputEncoding = value;
     }
+
     public string Title
     {
         get => Console.Title;
@@ -512,3 +515,4 @@ public class ConsoleWrapper : IConsole
 
     public void WriteLine(ulong value) => Console.WriteLine(value);
 }
+#pragma warning restore CA1416

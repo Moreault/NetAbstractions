@@ -30,6 +30,7 @@ public interface IStream : IDisposable, IInstanceWrapper<Stream>, IAsyncDisposab
     long Seek(long offset, SeekOrigin origin);
     void SetLength(long value);
     int Read([In, Out] byte[] buffer, int offset, int count);
+    ReadResult Read(int offset, int count);
     int ReadByte();
     void Write(byte[] buffer, int offset, int count);
     void WriteByte(byte value);
@@ -118,6 +119,17 @@ internal class StreamWrapper : IStream
     public Task FlushAsync(CancellationToken cancellationToken) => Unwrapped.FlushAsync(cancellationToken);
 
     public int Read([In, Out] byte[] buffer, int offset, int count) => Unwrapped.Read(buffer, offset, count);
+
+    public ReadResult Read(int offset, int count)
+    {
+        var value = new byte[count];
+        var amount = Unwrapped.Read(value, offset, count);
+        return new ReadResult
+        {
+            Count = amount,
+            Value = value
+        };
+    }
 
     public Task<int> ReadAsync(byte[] buffer, int offset, int count) => Unwrapped.ReadAsync(buffer, offset, count);
 
