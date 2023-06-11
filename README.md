@@ -27,6 +27,28 @@ public class ShadyService : IShadyService
 }
 ```
 
+And down the line,
+
+```c#
+[TestClass]
+public class ShadyServiceTest
+{
+	[TestMethod]
+	public void SomeTest()
+	{
+		var file = new Mock<IFile>();
+		var shadyService = new ShadyService(file.Object);
+
+		var path = "c:/temp/something.wat";
+		shadyService.DoTheThing(path);
+
+		file.Setup(x => x.Exists(path)).Returns(true);
+
+		file.Verify(x => x.Delete(path), Times.Once);
+	}
+}
+```
+
 ## Getting started
 
 Thankfully, NetAbstractions uses AutoInject to inject all those wrappers for you. You do still need to call this one line :
@@ -40,7 +62,7 @@ public void ConfigureServices(IServiceCollection services)
 
 [See AutoInject's repo for more info](https://github.com/Moreault/AutoInject "AutoInject")
 
-You can also add them one by one if that's what you want but that would be weird.
+You can also add every service one by one if you're into that but the end result will be the same.
 
 ## IInstanceWrapper and the Unwrapped property
 
