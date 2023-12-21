@@ -1,6 +1,6 @@
 ﻿namespace ToolBX.NetAbstractions.IO.Compression;
 
-public interface IZipArchive : IInstanceWrapper<ZipArchive>, IDisposable
+public interface IZipArchive : IWrapper<ZipArchive>, IDisposable
 {
     /// <summary>
     /// The collection of entries that are currently in the ZipArchive. This may not accurately represent the actual entries that are present in the underlying file or stream.
@@ -57,28 +57,16 @@ public interface IZipArchive : IInstanceWrapper<ZipArchive>, IDisposable
     IZipArchiveEntry? GetEntry(string entryName);
 }
 
-internal class ZipArchiveWrapper : IZipArchive
+internal class ZipArchiveWrapper : Wrapper<ZipArchive>, IZipArchive
 {
-    public ZipArchive Unwrapped { get; }
     public IReadOnlyCollection<IZipArchiveEntry> Entries => _entries.Value;
     private readonly Lazy<IReadOnlyCollection<IZipArchiveEntry>> _entries;
     public ZipArchiveMode Mode => Unwrapped.Mode;
 
-    public ZipArchiveWrapper(ZipArchive unwrapped)
+    public ZipArchiveWrapper(ZipArchive unwrapped) : base(unwrapped)
     {
-        Unwrapped = unwrapped ?? throw new ArgumentNullException(nameof(unwrapped));
         _entries = new Lazy<IReadOnlyCollection<IZipArchiveEntry>>(() => Unwrapped.Entries.Select(x => new ZipArchiveEntryWrapper(x)).ToList());
     }
-
-    public bool Equals(ZipArchive? other) => Unwrapped.Equals(other);
-
-    public bool Equals(ZipArchiveWrapper? other) => Unwrapped.Equals(other?.Unwrapped);
-
-    public static bool operator ==(ZipArchiveWrapper? a, ZipArchiveWrapper? b) => a is null && b is null || a is not null && a.Equals(b);
-
-    public static bool operator !=(ZipArchiveWrapper? a, ZipArchiveWrapper? b) => !(a == b);
-
-    public override string? ToString() => Unwrapped.ToString();
 
     public IZipArchiveEntry CreateEntry(string entryName)
     {
@@ -93,10 +81,6 @@ internal class ZipArchiveWrapper : IZipArchive
     }
 
     public void Dispose() => Unwrapped.Dispose();
-
-    public override bool Equals(object? obj) => Unwrapped.Equals(obj);
-
-    public override int GetHashCode() => Unwrapped.GetHashCode();
 
     public IZipArchiveEntry? GetEntry(string entryName)
     {

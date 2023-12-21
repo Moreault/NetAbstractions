@@ -17,7 +17,7 @@ public interface IZipFile
     void ExtractToDirectory(string sourceArchiveFileName, string destinationDirectoryName, Encoding? entryNameEncoding, bool overwriteFiles);
 }
 
-[AutoInject]
+[AutoInject(ServiceLifetime.Singleton)]
 public class ZipFileWrapper : IZipFile
 {
     public IZipArchive OpenRead(string archiveFileName) => new ZipArchiveWrapper(ZipFile.OpenRead(archiveFileName));

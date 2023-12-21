@@ -1,6 +1,6 @@
 ﻿namespace ToolBX.NetAbstractions.IO;
 
-public interface IFileInfo : IFileSystemInfo, IInstanceWrapper<FileInfo>
+public interface IFileInfo : IFileSystemInfo, IWrapper<FileInfo>
 {
     long Length { get; }
     string? DirectoryName { get; }
@@ -22,13 +22,10 @@ public interface IFileInfo : IFileSystemInfo, IInstanceWrapper<FileInfo>
     IFileInfo ReplaceAndIgnoreMetadataErrors(string destinationFileName, string destinationBackupFileName);
 }
 
-internal class FileInfoWrapper : IFileInfo
+internal class FileInfoWrapper : Wrapper<FileInfo>, IFileInfo
 {
-    public FileInfo Unwrapped { get; }
-
-    public FileInfoWrapper(FileInfo file)
+    public FileInfoWrapper(FileInfo unwrapped) : base(unwrapped)
     {
-        Unwrapped = file ?? throw new ArgumentNullException(nameof(file));
     }
 
     public void GetObjectData(SerializationInfo info, StreamingContext context) => Unwrapped.GetObjectData(info, context);
@@ -127,18 +124,5 @@ internal class FileInfoWrapper : IFileInfo
     public IFileInfo Replace(string destinationFileName, string destinationBackupFileName) => new FileInfoWrapper(Unwrapped.Replace(destinationFileName, destinationBackupFileName, false));
 
     public IFileInfo ReplaceAndIgnoreMetadataErrors(string destinationFileName, string destinationBackupFileName) => new FileInfoWrapper(Unwrapped.Replace(destinationFileName, destinationBackupFileName, true));
-
-    public override string ToString() => Unwrapped.ToString();
-
-    public bool Equals(FileInfo? other) => Unwrapped.Equals(other);
-
-    public override bool Equals(object? obj) => Unwrapped.Equals(obj);
-
-    protected bool Equals(FileInfoWrapper? other) => Equals(other as object);
-
-    public override int GetHashCode() => Unwrapped.GetHashCode();
-
-    public static bool operator ==(FileInfoWrapper? a, FileInfoWrapper? b) => a?.Equals(b) ?? b is null;
-
-    public static bool operator !=(FileInfoWrapper? a, FileInfoWrapper? b) => !(a == b);
+    
 }

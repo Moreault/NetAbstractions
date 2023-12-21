@@ -16,7 +16,7 @@ public interface IProcessStarter
     void LeaveDebugMode();
 }
 
-[AutoInject]
+[AutoInject(ServiceLifetime.Singleton)]
 public class ProcessStarter : IProcessStarter
 {
     public IProcess GetProcessById(int processId, string machineName) => new ProcessWrapper(Process.GetProcessById(processId, machineName));

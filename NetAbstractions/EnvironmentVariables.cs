@@ -10,7 +10,7 @@ public interface IEnvironmentVariables
     bool Contains(string key);
 }
 
-[AutoInject]
+[AutoInject(ServiceLifetime.Singleton)]
 public class EnvironmentVariables : IEnvironmentVariables
 {
     public string? this[string key]

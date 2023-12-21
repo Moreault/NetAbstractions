@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetAbstractions", "NetAbstractions\NetAbstractions.csproj", "{3D43B664-2462-4092-82F6-9FD92746F4E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetAbstractions.Web", "NetAbstractions.Web\NetAbstractions.Web.csproj", "{C5980FBD-EAF5-4E12-8034-331FBC13320C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetAbstractions.Web", "NetAbstractions.Web\NetAbstractions.Web.csproj", "{C5980FBD-EAF5-4E12-8034-331FBC13320C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

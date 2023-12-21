@@ -67,6 +67,4 @@ internal class StreamWriterWrapper : TextWriterWrapper<StreamWriter>, IStreamWri
     public void WriteLine(StringBuilder value) => Unwrapped.WriteLine(value);
 
     public Task WriteLineAsync(StringBuilder value, CancellationToken cancellationToken) => Unwrapped.WriteLineAsync(value, cancellationToken);
-
-    public override string? ToString() => Unwrapped.ToString();
 }

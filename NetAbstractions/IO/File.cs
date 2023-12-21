@@ -54,7 +54,7 @@ public interface IFile
     void Move(string sourceFileName, string destFileName);
 }
 
-[AutoInject]
+[AutoInject(ServiceLifetime.Singleton)]
 public class FileWrapper : IFile
 {
     public IStreamReader OpenText(string path) => new StreamReaderWrapper(File.OpenText(path));

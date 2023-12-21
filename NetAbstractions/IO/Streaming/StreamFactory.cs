@@ -33,7 +33,7 @@ public interface IStreamFactory
     IDeflateStream DeflateStream(IStream stream, CompressionLevel compressionLevel, bool leaveOpen);
 }
 
-[AutoInject]
+[AutoInject(ServiceLifetime.Singleton)]
 public class StreamFactory : IStreamFactory
 {
     public IStream Stream(Stream stream) => new StreamWrapper(stream);

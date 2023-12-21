@@ -1,6 +1,6 @@
 ﻿namespace ToolBX.NetAbstractions.Diagnostics;
 
-public interface IProcess : IComponent, IInstanceWrapper<Process>
+public interface IProcess : IComponent, IWrapper<Process>
 {
     event DataReceivedEventHandler OutputDataReceived;
     event DataReceivedEventHandler ErrorDataReceived;
@@ -65,13 +65,10 @@ public interface IProcess : IComponent, IInstanceWrapper<Process>
     bool Responding { get; }
 }
 
-internal class ProcessWrapper : IProcess
+internal class ProcessWrapper : Wrapper<Process>, IProcess
 {
-    public Process Unwrapped { get; }
-
-    public ProcessWrapper(Process process)
+    public ProcessWrapper(Process unwrapped) : base(unwrapped)
     {
-        Unwrapped = process ?? throw new ArgumentNullException(nameof(process));
     }
 
     public void Dispose()
@@ -208,19 +205,6 @@ internal class ProcessWrapper : IProcess
     public string MainWindowTitle => Unwrapped.MainWindowTitle;
     public bool Responding => Unwrapped.Responding;
 
-    public override string ToString() => Unwrapped.ToString();
-
-    public bool Equals(Process? other) => Unwrapped.Equals(other);
-
-    public override bool Equals(object? obj) => Unwrapped.Equals(obj);
-
-    protected bool Equals(ProcessWrapper? other) => Equals(other as object);
-
-    public override int GetHashCode() => Unwrapped.GetHashCode();
-
-    public static bool operator ==(ProcessWrapper? a, ProcessWrapper? b) => a is null && b is null || a is not null && a.Equals(b);
-
-    public static bool operator !=(ProcessWrapper? a, ProcessWrapper? b) => !(a == b);
-
+    [Obsolete("Use explicit operator instead : Will be removed in 3.0.0")]
     public static implicit operator Process(ProcessWrapper process) => process.Unwrapped;
 }

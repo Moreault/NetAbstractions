@@ -70,7 +70,7 @@ public interface IGarbageCollector
     IReadOnlyList<T> AllocateArray<T>(int length, bool pinned = false);
 }
 
-[AutoInject]
+[AutoInject(ServiceLifetime.Singleton)]
 public class GarbageCollector : IGarbageCollector
 {
     public int MaxGeneration => GC.MaxGeneration;

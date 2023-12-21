@@ -44,6 +44,22 @@ public interface IPath
     ReadOnlySpan<char> GetExtension(ReadOnlySpan<char> path);
 
     /// <summary>
+    /// Returns the extension of the given path. The returned value includes the period (".") character of the
+    /// extension except when you have a terminal period when you get string.Empty, such as ".exe" or ".cpp".
+    /// The returned value is null if the given path is null or empty if the given path does not include an
+    /// extension.
+    /// </summary>
+    string? GetExtensionWithoutDot(string? path);
+
+    /// <summary>
+    /// Returns the extension of the given path.
+    /// </summary>
+    /// <remarks>
+    /// The returned value is an empty ReadOnlySpan if the given path does not include an extension.
+    /// </remarks>
+    ReadOnlySpan<char> GetExtensionWithoutDot(ReadOnlySpan<char> path);
+
+    /// <summary>
     /// Returns the name and extension parts of the given path. The resulting string contains
     /// the characters of path that follow the last separator in path. The resulting string is
     /// null if path is null.
@@ -102,8 +118,8 @@ public interface IPath
     string Join(IEnumerable<string?> paths);
     string Join(params string?[] paths);
 
-    TryGetResult<int> TryJoin(ReadOnlySpan<char> path1, ReadOnlySpan<char> path2, Span<char> destination);
-    TryGetResult<int> TryJoin(ReadOnlySpan<char> path1, ReadOnlySpan<char> path2, ReadOnlySpan<char> path3, Span<char> destination);
+    Result<int> TryJoin(ReadOnlySpan<char> path1, ReadOnlySpan<char> path2, Span<char> destination);
+    Result<int> TryJoin(ReadOnlySpan<char> path1, ReadOnlySpan<char> path2, ReadOnlySpan<char> path3, Span<char> destination);
 
     /// <summary>
     /// Create a relative path from one path to another. Paths will be resolved before calculating the difference.
@@ -168,7 +184,7 @@ public interface IPath
     ReadOnlySpan<char> GetPathRoot(ReadOnlySpan<char> path);
 }
 
-[AutoInject]
+[AutoInject(ServiceLifetime.Singleton)]
 public class PathWrapper : IPath
 {
     public string? ChangeExtension(string? path, string? extension) => Path.ChangeExtension(path, extension);
@@ -180,6 +196,10 @@ public class PathWrapper : IPath
     public string? GetExtension(string? path) => Path.GetExtension(path);
 
     public ReadOnlySpan<char> GetExtension(ReadOnlySpan<char> path) => Path.GetFileName(path);
+
+    public string? GetExtensionWithoutDot(string? path) => GetExtension(path)?.TrimStart('.');
+
+    public ReadOnlySpan<char> GetExtensionWithoutDot(ReadOnlySpan<char> path) => GetExtension(path).TrimStart('.');
 
     public string? GetFileName(string? path) => Path.GetFileName(path);
 
@@ -213,16 +233,16 @@ public class PathWrapper : IPath
 
     public string Join(params string?[] paths) => Path.Join(paths);
 
-    public TryGetResult<int> TryJoin(ReadOnlySpan<char> path1, ReadOnlySpan<char> path2, Span<char> destination)
+    public Result<int> TryJoin(ReadOnlySpan<char> path1, ReadOnlySpan<char> path2, Span<char> destination)
     {
         var result = Path.TryJoin(path1, path2, destination, out var charsWritten);
-        return new TryGetResult<int>(result, charsWritten);
+        return result ? Result<int>.Success(charsWritten) : Result<int>.Failure();
     }
 
-    public TryGetResult<int> TryJoin(ReadOnlySpan<char> path1, ReadOnlySpan<char> path2, ReadOnlySpan<char> path3, Span<char> destination)
+    public Result<int> TryJoin(ReadOnlySpan<char> path1, ReadOnlySpan<char> path2, ReadOnlySpan<char> path3, Span<char> destination)
     {
         var result = Path.TryJoin(path1, path2, path3, destination, out var charsWritten);
-        return new TryGetResult<int>(result, charsWritten);
+        return result ? Result<int>.Success(charsWritten) : Result<int>.Failure();
     }
 
     public string GetRelativePath(string relativeTo, string path) => Path.GetRelativePath(relativeTo, path);

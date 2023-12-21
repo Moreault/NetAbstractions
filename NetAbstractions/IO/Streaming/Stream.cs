@@ -1,6 +1,6 @@
 ﻿namespace ToolBX.NetAbstractions.IO.Streaming;
 
-public interface IStream : IDisposable, IInstanceWrapper<Stream>, IAsyncDisposable
+public interface IStream : IDisposable, IWrapper<Stream>, IAsyncDisposable
 {
     bool CanRead { get; }
     bool CanSeek { get; }
@@ -44,13 +44,10 @@ public interface IStream<out T> : IStream where T : Stream
     new T Unwrapped { get; }
 }
 
-internal class StreamWrapper : IStream
+internal class StreamWrapper : Wrapper<Stream>, IStream
 {
-    public Stream Unwrapped { get; }
-
-    public StreamWrapper(Stream stream)
+    public StreamWrapper(Stream unwrapped) : base(unwrapped)
     {
-        Unwrapped = stream ?? throw new ArgumentNullException(nameof(stream));
     }
 
     public bool CanRead => Unwrapped.CanRead;
@@ -170,29 +167,6 @@ internal class StreamWrapper : IStream
         using var outstream = ToMemoryStream();
         return outstream.ToArray();
     }
-
-    public bool Equals(StreamWrapper? other)
-    {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
-        return Unwrapped.Equals(other.Unwrapped);
-    }
-
-    public bool Equals(Stream? other) => Unwrapped.Equals(other);
-
-    public override bool Equals(object? obj) => Equals(obj as StreamWrapper);
-
-    public static bool operator ==(StreamWrapper? a, StreamWrapper? b) => a is null && b is null || a is not null && a.Equals(b);
-
-    public static bool operator !=(StreamWrapper? a, StreamWrapper? b) => !(a == b);
-
-    public static bool operator ==(StreamWrapper? a, Stream? b) => a is null && b is null || a is not null && a.Equals(b);
-
-    public static bool operator !=(StreamWrapper? a, Stream? b) => !(a == b);
-
-    public override int GetHashCode() => Unwrapped.GetHashCode();
-
-    public override string? ToString() => Unwrapped.ToString();
 
     public ValueTask DisposeAsync() => Unwrapped.DisposeAsync();
 
