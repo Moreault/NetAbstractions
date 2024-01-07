@@ -2,8 +2,8 @@
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddNetAbstractions(this IServiceCollection services)
+    public static IServiceCollection AddNetAbstractions(this IServiceCollection services, AutoInjectOptions? options = null)
     {
-        return services.AddAutoInjectServices(Assembly.GetExecutingAssembly());
+        return services.AddAutoInjectServices(Assembly.GetExecutingAssembly(), options);
     }
 }
