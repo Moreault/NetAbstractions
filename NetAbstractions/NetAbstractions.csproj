@@ -30,8 +30,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ToolBX.AutoInject" Version="2.2.0-beta6" />
-		<PackageReference Include="ToolBX.Mathemancy" Version="2.2.0-beta2" />
+		<PackageReference Include="ToolBX.AutoInject" Version="2.2.0-beta7" />
+		<PackageReference Include="ToolBX.Mathemancy" Version="2.2.0-beta3" />
 		<PackageReference Include="ToolBX.WrapperMeister" Version="2.2.0-beta1" />
 	</ItemGroup>
 
