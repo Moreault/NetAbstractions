@@ -268,7 +268,7 @@ public interface IConsole
 }
 
 #pragma warning disable CA1416
-[AutoInject]
+[AutoInject(ServiceLifetime.Singleton)]
 public class ConsoleWrapper : IConsole
 {
     public ConsoleColor BackgroundColor

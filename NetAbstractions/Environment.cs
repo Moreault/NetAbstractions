@@ -41,7 +41,7 @@ public interface IEnvironment
     IDictionary GetEnvironmentVariables();
 }
 
-[AutoInject]
+[AutoInject(ServiceLifetime.Singleton)]
 public class EnvironmentWrapper : IEnvironment
 {
     public int CurrentManagedThreadId => Environment.CurrentManagedThreadId;

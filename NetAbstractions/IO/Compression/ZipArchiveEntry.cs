@@ -1,6 +1,6 @@
 ﻿namespace ToolBX.NetAbstractions.IO.Compression;
 
-public interface IZipArchiveEntry : IInstanceWrapper<ZipArchiveEntry>
+public interface IZipArchiveEntry : IWrapper<ZipArchiveEntry>
 {
     IZipArchive Archive { get; }
     uint Crc32 { get; }
@@ -14,10 +14,8 @@ public interface IZipArchiveEntry : IInstanceWrapper<ZipArchiveEntry>
     IStream Open();
 }
 
-internal class ZipArchiveEntryWrapper : IZipArchiveEntry
+internal class ZipArchiveEntryWrapper : Wrapper<ZipArchiveEntry>, IZipArchiveEntry
 {
-    public ZipArchiveEntry Unwrapped { get; }
-
     public IZipArchive Archive => _archive.Value;
     private readonly Lazy<IZipArchive> _archive;
 
@@ -40,14 +38,10 @@ internal class ZipArchiveEntryWrapper : IZipArchiveEntry
     public long Length => Unwrapped.Length;
     public string Name => Unwrapped.Name;
 
-    public ZipArchiveEntryWrapper(ZipArchiveEntry unwrapped)
+    public ZipArchiveEntryWrapper(ZipArchiveEntry unwrapped) : base(unwrapped)
     {
-        Unwrapped = unwrapped ?? throw new ArgumentNullException(nameof(unwrapped));
         _archive = new Lazy<IZipArchive>(() => new ZipArchiveWrapper(unwrapped.Archive));
-
     }
-
-    public bool Equals(ZipArchiveEntry? other) => Unwrapped.Equals(other);
 
     public void Delete() => Unwrapped.Delete();
 

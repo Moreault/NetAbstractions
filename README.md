@@ -51,16 +51,24 @@ public class ShadyServiceTest
 
 ## Getting started
 
-Thankfully, NetAbstractions uses AutoInject to inject all those wrappers for you. You do still need to call this one line :
+### Using (https://github.com/Moreault/AutoInject "AutoInject")
 
 ```c#
 public void ConfigureServices(IServiceCollection services)
 {
+	//This only needs to be called once for your entire application
     services.AddAutoInjectServices();
 }
 ```
 
-[See AutoInject's repo for more info](https://github.com/Moreault/AutoInject "AutoInject")
+### Manually
+
+```c#
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddNetAbstractions();
+}
+```
 
 You can also add every service one by one if you're into that but the end result will be the same.
 

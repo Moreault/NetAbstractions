@@ -1,4 +1,6 @@
-﻿namespace ToolBX.NetAbstractions.Web.AspNetCore;
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace ToolBX.NetAbstractions.Web.AspNetCore;
 
 public interface IQueryHelpers
 {
@@ -8,7 +10,7 @@ public interface IQueryHelpers
     IDictionary<string, StringValues> ParseNullableQuery(string queryString);
 }
 
-[AutoInject]
+[AutoInject(ServiceLifetime.Singleton)]
 public class QueryHelpersWrapper : IQueryHelpers
 {
     public string AddQueryString(string uri, string name, string value) => QueryHelpers.AddQueryString(uri, name, value);

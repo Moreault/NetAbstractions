@@ -8,7 +8,7 @@ public interface IDirectory
     /// <summary>
     /// Attempts to create directory at path but does not throw in the event of a failure.
     /// </summary>
-    TryGetResult<IDirectoryInfo> TryCreateDirectory(string path);
+    Result<IDirectoryInfo> TryCreateDirectory(string path);
 
     /// <summary>
     /// Ensures that path exists and creates it if it doesn't.
@@ -54,7 +54,7 @@ public interface IDirectory
     IReadOnlyList<string> GetLogicalDrives();
 }
 
-[AutoInject]
+[AutoInject(ServiceLifetime.Singleton)]
 public class DirectoryWrapper : IDirectory
 {
     public IDirectoryInfo? GetParent(string path)
@@ -65,15 +65,17 @@ public class DirectoryWrapper : IDirectory
 
     public IDirectoryInfo CreateDirectory(string path) => new DirectoryInfoWrapper(Directory.CreateDirectory(path));
 
-    public TryGetResult<IDirectoryInfo> TryCreateDirectory(string path)
+    public Result<IDirectoryInfo> TryCreateDirectory(string path)
     {
         try
         {
-            return Exists(path) ? new TryGetResult<IDirectoryInfo>(new DirectoryInfoWrapper(new DirectoryInfo(path))) : new TryGetResult<IDirectoryInfo>(CreateDirectory(path));
+            return Exists(path) ? 
+                Result<IDirectoryInfo>.Success(new DirectoryInfoWrapper(new DirectoryInfo(path))) : 
+                Result<IDirectoryInfo>.Success(CreateDirectory(path));
         }
         catch (Exception)
         {
-            return TryGetResult<IDirectoryInfo>.Failure;
+            return Result<IDirectoryInfo>.Failure();
         }
     }
 

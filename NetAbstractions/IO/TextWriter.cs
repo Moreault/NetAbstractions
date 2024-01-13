@@ -1,6 +1,6 @@
 ﻿namespace ToolBX.NetAbstractions.IO;
 
-public interface ITextWriter : IDisposable, IInstanceWrapper<TextWriter>, IAsyncDisposable
+public interface ITextWriter : IDisposable, IWrapper<TextWriter>, IAsyncDisposable
 {
     Encoding Encoding { get; }
     IFormatProvider FormatProvider { get; }
@@ -53,13 +53,10 @@ public interface ITextWriter<out T> : ITextWriter where T : TextWriter
     new T Unwrapped { get; }
 }
 
-internal class TextWriterWrapper : ITextWriter
+internal class TextWriterWrapper : Wrapper<TextWriter>, ITextWriter
 {
-    public TextWriter Unwrapped { get; }
-
-    public TextWriterWrapper(TextWriter textWriter)
+    public TextWriterWrapper(TextWriter unwrapped) : base(unwrapped)
     {
-        Unwrapped = textWriter ?? throw new ArgumentNullException(nameof(textWriter));
     }
 
     public void Dispose() => Unwrapped.Dispose();
@@ -77,7 +74,7 @@ internal class TextWriterWrapper : ITextWriter
 
     public void Flush() => Unwrapped.Flush();
 
-    public async Task FlushAsync() => await Unwrapped.FlushAsync();
+    public Task FlushAsync() => Unwrapped.FlushAsync();
 
     public void Write(bool value) => Unwrapped.Write(value);
 
@@ -107,13 +104,13 @@ internal class TextWriterWrapper : ITextWriter
 
     public void Write(ulong value) => Unwrapped.Write(value);
 
-    public async Task WriteAsync(char value) => await Unwrapped.WriteAsync(value);
+    public Task WriteAsync(char value) => Unwrapped.WriteAsync(value);
 
-    public async Task WriteAsync(char[] buffer) => await Unwrapped.WriteAsync(buffer);
+    public Task WriteAsync(char[] buffer) => Unwrapped.WriteAsync(buffer);
 
-    public async Task WriteAsync(char[] buffer, int index, int count) => await Unwrapped.WriteAsync(buffer, index, count);
+    public Task WriteAsync(char[] buffer, int index, int count) => Unwrapped.WriteAsync(buffer, index, count);
 
-    public async Task WriteAsync(string value) => await Unwrapped.WriteAsync(value);
+    public Task WriteAsync(string value) => Unwrapped.WriteAsync(value);
 
     public void WriteLine() => Unwrapped.WriteLine();
 
@@ -145,35 +142,17 @@ internal class TextWriterWrapper : ITextWriter
 
     public void WriteLine(ulong value) => Unwrapped.WriteLine(value);
 
-    public async Task WriteLineAsync() => await Unwrapped.WriteLineAsync();
+    public Task WriteLineAsync() => Unwrapped.WriteLineAsync();
 
-    public async Task WriteLineAsync(char value) => await Unwrapped.WriteLineAsync(value);
+    public Task WriteLineAsync(char value) => Unwrapped.WriteLineAsync(value);
 
-    public async Task WriteLineAsync(char[] buffer) => await Unwrapped.WriteLineAsync(buffer);
+    public Task WriteLineAsync(char[] buffer) => Unwrapped.WriteLineAsync(buffer);
 
-    public async Task WriteLineAsync(char[] buffer, int index, int count) => await Unwrapped.WriteLineAsync(buffer, index, count);
+    public Task WriteLineAsync(char[] buffer, int index, int count) => Unwrapped.WriteLineAsync(buffer, index, count);
 
-    public async Task WriteLineAsync(string value) => await Unwrapped.WriteLineAsync(value);
-
-    public bool Equals(ITextWriter? other) => Equals(other as TextWriterWrapper);
-
-    public bool Equals(TextWriterWrapper? other) => other is not null && Unwrapped.Equals(other.Unwrapped);
-
-    public bool Equals(TextWriter? other) => Unwrapped.Equals(other);
-
-    public override bool Equals(object? obj)
-    {
-        if (obj is TextWriterWrapper wrapper) return Equals(wrapper);
-        return Equals(obj as TextWriter);
-    }
-
-    public override int GetHashCode() => Unwrapped.GetHashCode();
+    public Task WriteLineAsync(string value) => Unwrapped.WriteLineAsync(value);
 
     public ValueTask DisposeAsync() => Unwrapped.DisposeAsync();
-
-    public static bool operator ==(TextWriterWrapper? a, TextWriterWrapper? b) => a is null && b is null || a is not null && a.Equals(b);
-
-    public static bool operator !=(TextWriterWrapper? a, TextWriterWrapper? b) => !(a == b);
 
     public T GetUnwrapped<T>() where T : TextWriter => (T)Unwrapped;
 }

@@ -1,6 +1,6 @@
 ﻿namespace ToolBX.NetAbstractions;
 
-public interface IInstanceWrapper<T> : IEquatable<T>
+[Obsolete("Use IWrapper<T> instead. Will be removed in 3.0.0.0")]
+public interface IInstanceWrapper<T> : IWrapper<T>
 {
-    T Unwrapped { get; }
 }

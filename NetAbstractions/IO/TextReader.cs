@@ -1,6 +1,6 @@
 ﻿namespace ToolBX.NetAbstractions.IO;
 
-public interface ITextReader : IDisposable, IInstanceWrapper<TextReader>
+public interface ITextReader : IDisposable, IWrapper<TextReader>
 {
     void Close();
     int Peek();
@@ -29,36 +29,13 @@ public interface ITextReader<out T> : ITextReader where T : TextReader
     new T Unwrapped { get; }
 }
 
-internal class TextReaderWrapper : ITextReader
+internal class TextReaderWrapper : Wrapper<TextReader>, ITextReader
 {
-    public TextReader Unwrapped { get; }
-
-    public TextReaderWrapper(TextReader textReader)
+    public TextReaderWrapper(TextReader unwrapped) : base(unwrapped)
     {
-        Unwrapped = textReader ?? throw new ArgumentNullException(nameof(textReader));
     }
 
     public void Dispose() => Unwrapped.Dispose();
-
-    public static explicit operator TextReader(TextReaderWrapper wrapper) => wrapper.Unwrapped;
-
-    public static TextReader Unwrap(ITextReader wrapper) => (TextReader)(TextReaderWrapper)wrapper;
-
-    public bool Equals(ITextReader? other) => other is not null && Equals(Unwrap(other));
-
-    public bool Equals(TextReader? other) => Unwrapped.Equals(other);
-
-    public override bool Equals(object? obj)
-    {
-        if (obj is TextReaderWrapper wrapper) return Equals(wrapper);
-        return Equals(obj as TextReader);
-    }
-
-    public override int GetHashCode() => Unwrapped.GetHashCode();
-
-    public static bool operator ==(TextReaderWrapper? a, TextReaderWrapper? b) => a is null && b is null || !(a is null) && a.Equals(b);
-
-    public static bool operator !=(TextReaderWrapper? a, TextReaderWrapper? b) => !(a == b);
 
     public void Close() => Unwrapped.Close();
 
@@ -74,13 +51,13 @@ internal class TextReaderWrapper : ITextReader
 
     public string? ReadLine() => Unwrapped.ReadLine();
 
-    public async Task<string?> ReadLineAsync() => await Unwrapped.ReadLineAsync();
+    public Task<string?> ReadLineAsync() => Unwrapped.ReadLineAsync();
 
     public async Task<string?> ReadToEndAsync() => await Unwrapped.ReadToEndAsync();
 
-    public async Task<int> ReadAsync(char[] buffer, int index, int count) => await Unwrapped.ReadAsync(buffer, index, count);
+    public Task<int> ReadAsync(char[] buffer, int index, int count) => Unwrapped.ReadAsync(buffer, index, count);
 
-    public async Task<int> ReadBlockAsync(char[] buffer, int index, int count) => await Unwrapped.ReadBlockAsync(buffer, index, count);
+    public Task<int> ReadBlockAsync(char[] buffer, int index, int count) => Unwrapped.ReadBlockAsync(buffer, index, count);
 
     public T GetUnwrapped<T>() where T : TextReader => (T)Unwrapped;
 }
