@@ -204,7 +204,4 @@ internal class ProcessWrapper : Wrapper<Process>, IProcess
     public IntPtr MainWindowHandle => Unwrapped.MainWindowHandle;
     public string MainWindowTitle => Unwrapped.MainWindowTitle;
     public bool Responding => Unwrapped.Responding;
-
-    [Obsolete("Use explicit operator instead : Will be removed in 3.0.0")]
-    public static implicit operator Process(ProcessWrapper process) => process.Unwrapped;
 }
