@@ -19,7 +19,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ToolBX.AutoInject" Version="3.0.0" />
+		<PackageReference Include="ToolBX.AutoInject" Version="3.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.8" />
 	</ItemGroup>
 
