@@ -35,8 +35,6 @@ internal class DirectoryInfoWrapper : Wrapper<DirectoryInfo>, IDirectoryInfo
     {
     }
 
-    public void GetObjectData(SerializationInfo info, StreamingContext context) => Unwrapped.GetObjectData(info, context);
-
     public string FullName => Unwrapped.FullName;
     public string Extension => Unwrapped.Extension;
     public string Name => Unwrapped.Name;
