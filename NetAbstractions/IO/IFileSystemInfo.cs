@@ -1,6 +1,6 @@
 ﻿namespace ToolBX.NetAbstractions.IO;
 
-public interface IFileSystemInfo : ISerializable
+public interface IFileSystemInfo
 {
     string FullName { get; }
     string Extension { get; }

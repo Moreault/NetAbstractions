@@ -12,7 +12,6 @@ global using System.IO.Compression;
 global using System.Linq;
 global using System.Reflection;
 global using System.Runtime.InteropServices;
-global using System.Runtime.Serialization;
 global using System.Runtime.Versioning;
 global using System.Text;
 global using System.Threading.Tasks;
