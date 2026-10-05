@@ -52,6 +52,8 @@ public interface IDirectory
     void DeleteNonRecursively(string path);
     void DeleteRecursively(string path);
     IReadOnlyList<string> GetLogicalDrives();
+    IDirectoryInfo GetInfo(string path);
+    Result<IDirectoryInfo> TryGetInfo(string path);
 }
 
 [AutoInject(ServiceLifetime.Singleton)]
@@ -162,5 +164,21 @@ public class DirectoryWrapper : IDirectory
 
     public IReadOnlyList<string> GetLogicalDrives() => Directory.GetLogicalDrives();
 
+    public IDirectoryInfo GetInfo(string path)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(path);
+        return new DirectoryInfoWrapper(path);
+    }
 
+    public Result<IDirectoryInfo> TryGetInfo(string path)
+    {
+        try
+        {
+            return Result<IDirectoryInfo>.Success(GetInfo(path));
+        }
+        catch
+        {
+            return Result<IDirectoryInfo>.Failure();
+        }
+    }
 }

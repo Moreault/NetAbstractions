@@ -31,6 +31,11 @@ public interface IDirectoryInfo : IFileSystemInfo, IWrapper<DirectoryInfo>
 
 internal class DirectoryInfoWrapper : Wrapper<DirectoryInfo>, IDirectoryInfo
 {
+    public DirectoryInfoWrapper(string path) : this(new DirectoryInfo(path))
+    {
+
+    }
+
     public DirectoryInfoWrapper(DirectoryInfo unwrapped) : base(unwrapped)
     {
     }

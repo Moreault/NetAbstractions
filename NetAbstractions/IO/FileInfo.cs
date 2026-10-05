@@ -24,6 +24,10 @@ public interface IFileInfo : IFileSystemInfo, IWrapper<FileInfo>
 
 internal class FileInfoWrapper : Wrapper<FileInfo>, IFileInfo
 {
+    public FileInfoWrapper(string path) : this(new FileInfo(path))
+    {
+    }
+
     public FileInfoWrapper(FileInfo unwrapped) : base(unwrapped)
     {
     }
