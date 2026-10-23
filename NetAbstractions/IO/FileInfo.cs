@@ -18,6 +18,7 @@ public interface IFileInfo : IFileSystemInfo, IWrapper<FileInfo>
     IFileStream OpenRead();
     IFileStream OpenWrite();
     void MoveTo(string destFileName);
+    void MoveToAndOverwrite(string destFileName);
     IFileInfo Replace(string destinationFileName, string destinationBackupFileName);
     IFileInfo ReplaceAndIgnoreMetadataErrors(string destinationFileName, string destinationBackupFileName);
 }
@@ -122,6 +123,8 @@ internal class FileInfoWrapper : Wrapper<FileInfo>, IFileInfo
     public IFileStream OpenWrite() => new FileStreamWrapper(Unwrapped.OpenWrite());
 
     public void MoveTo(string destFileName) => Unwrapped.MoveTo(destFileName);
+
+    public void MoveToAndOverwrite(string destFileName) => Unwrapped.MoveTo(destFileName, true);
 
     public IFileInfo Replace(string destinationFileName, string destinationBackupFileName) => new FileInfoWrapper(Unwrapped.Replace(destinationFileName, destinationBackupFileName, false));
 

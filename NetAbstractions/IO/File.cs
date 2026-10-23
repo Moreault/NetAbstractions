@@ -52,6 +52,7 @@ public interface IFile
     void Replace(string sourceFileName, string destinationFileName, string destinationBackupFileName);
     void ReplaceAndIgnoreMetadataErrors(string sourceFileName, string destinationFileName, string destinationBackupFileName);
     void Move(string sourceFileName, string destFileName);
+    void MoveAndOverwrite(string sourceFileName, string destFileName);
     IFileInfo GetInfo(string path);
     Result<IFileInfo> TryGetInfo(string path);
 }
@@ -158,6 +159,8 @@ public class FileWrapper : IFile
     public void ReplaceAndIgnoreMetadataErrors(string sourceFileName, string destinationFileName, string destinationBackupFileName) => File.Replace(sourceFileName, destinationFileName, destinationBackupFileName, true);
 
     public void Move(string sourceFileName, string destFileName) => File.Move(sourceFileName, destFileName);
+
+    public void MoveAndOverwrite(string sourceFileName, string destFileName) => File.Move(sourceFileName, destFileName, true);
 
     public IFileInfo GetInfo(string path)
     {
